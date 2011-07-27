@@ -1,4 +1,4 @@
-/**
+/***
  * Tuna JavaScript Library
  * http://www.ctrip.com/
  *

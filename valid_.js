@@ -70,16 +70,13 @@ function isEmail(str){
 
 $.fn.extend({
 	valid_: function(configObject){
-		
+
 	}
 });
 
 
 
 })(this);
-
-
-
 
 
 

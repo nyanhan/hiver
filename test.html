@@ -4,11 +4,17 @@
 <h1>hello world <a href="###">111111</a></h1>
 
 <input type="" />
+<input type="" />
+<button> wo kao </button>
 </body>
 </html>
 <script src="jquery-1.6.1.js"></script>
+<script src="jquery_plugin.js"></script>
 <script>
-$("input").bind("input", function(e){
-	console.log(e.target.value);
+$("input").notice_({text: "hello world"});
+$("button").bind("click", function(){
+	window.open("http://www.baidu.com/");
+	window.focus();
 });
+
 </script>
