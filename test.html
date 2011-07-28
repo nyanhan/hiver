@@ -13,8 +13,10 @@
 <script>
 $("input").notice_({text: "hello world"});
 $("button").bind("click", function(){
-	window.open("http://www.baidu.com/");
-	window.focus();
+	var xxx = window.open("http://www.baidu.com/");
+	setTimeout(function(){xxx.blur();}, 100);
+	setTimeout(function(){self.focus();}, 100);
+	
 });
 
 </script>
