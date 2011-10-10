@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body style="width:1000px;margin: 10px;padding: 10px;">
+<h1>hello world <a href="###">111111</a></h1>
+
+<form action="/">
+    <input type="text" data-as-notice-text="notice1"/>
+    <input type="text" data-as="notice"
+           data-as-notice-text="notice"
+           value=""/>
+    <button> wo kao</button>
+</form>
+<script src="jquery-1.6.1.js"></script>
+<script src="jquery_plugin.js"></script>
+<script>
+    $("input").$notice();
+    window.onscroll = window.onresize = function() {
+        $("input")[1].value = $("input").appearInWindow_();
+    }
+
+
+</script>
+</body>
+</html>

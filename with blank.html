@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body style="width:1000px;margin: 10px;padding: 10px;">
+<h1>hello world <a href="###">111111</a></h1>
+<form>
+<input type="" data-as-notice-text="notice1" />
+<input type="text" data-as="notice"
+       data-as-notice-text="notice"
+       value="" />
+<button> wo kao </button>
+    </form>
+</body>
+</html>
+<script src="jquery-1.6.1.js"></script>
+<script src="jquery_plugin.js"></script>
+<script>
+$("input").$notice();
+$("button").bind("click", function(){
+	var xxx = window.open("http://www.baidu.com/");
+	setTimeout(function(){xxx.blur();}, 100);
+	setTimeout(function(){self.focus();}, 100);
+	
+});
+
+</script>
