@@ -19,4 +19,3 @@ function cal(n){
 	} while (n);
 	return i;
 }
-

@@ -31,7 +31,7 @@ function isDate(str){
 		m = dateList[3] | 0, 
 		d = dateList[4] | 0;
 	
-	if(m > 12 || m < 1 
+	if(m > 12 || m < 1 ||
 		d < 1 || d > 31){
 		return false;
 	}
@@ -77,6 +77,3 @@ $.fn.extend({
 
 
 })(this);
-
-
-

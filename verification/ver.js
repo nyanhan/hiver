@@ -10,9 +10,9 @@ QNR.authCode = (function(window){
 	var ERR = "At least privide an DOM container or her ID";
 	
 	var _default = {
-		imgSize: '120x38',
-		challengeURI: 'http://192.168.126.67:8088/recaptcha-core/api/challenge?k=aaa',
-		imgURI: 'http://192.168.126.67:8088/recaptcha-core/api/image',
+		imgSize: '1',
+		challengeURI: 'http://192.168.126.112:8088/recaptcha-core/api/challenge',
+		imgURI: 'http://192.168.126.112:8088/recaptcha-core/api/image',
 		imgID: 'vcodeImg',
 		imgClass: 'vcodeImg',
 		linkID: 'vcodeLink',
@@ -22,11 +22,11 @@ QNR.authCode = (function(window){
 		interval: 500
 	};
 	
-	var _template = '<img {#imgID} {#imgClass} src="{#imgURI}" {#height} {#width}> <a {#linkID} {#linkClass} href="javascript:;">{#linkText}</a><input type="hidden" {#inputName} value="{#challenge}" />';
+	var _template = '<img {#imgID} {#imgClass} src="{#imgURI}"> <a {#linkID} {#linkClass} href="javascript:;">{#linkText}</a><input type="hidden" {#inputName} value="{#challenge}" />';
 	
-	var container, config, timer = 0;
+	var container, config, timer = 0, appCode;
 	
-	var authCode = function(elem, conf){
+	var authCode = function(elem, applicationCode, conf){
 		
 		container = checkElement(elem);
 		
@@ -34,22 +34,18 @@ QNR.authCode = (function(window){
 			throw ERR;
 		}
 		
-		config = merge({}, _default, conf || {});
+		appCode = applicationCode;
 		
-		requestAuthCode(config.challengeURI);
+		config = merge({}, _default, conf || {});
+		requestAuthCode(config.challengeURI, applicationCode);
 	};
 	
 	authCode["callback"] = function(id){
-		var arr = config.imgSize.split("x"),
-			width = arr[0],
-			height = arr[1];
 			
 		container.innerHTML = printf(_template, {
 			imgID: config.imgID ? 'id="' + config.imgID + '"' : "",
 			imgClass: config.imgClass ? 'class="' + config.imgClass + '"' : "",
 			imgURI: config.imgURI + "?c=" + id + "&t=" + config.imgSize,
-			width:  isInt(width) ? 'width="'+ width +'"' : "",
-			height: isInt(height) ? 'height="'+ height +'"' : "",
 			linkID: config.linkID ? 'id="' + config.linkID + '"' : "",
 			linkClass: config.linkClass ? 'class="' + config.linkClass + '"' : "",
 			challenge: id,
@@ -63,7 +59,7 @@ QNR.authCode = (function(window){
 	
 	function handleClick(){
 		if(checkTimer()){
-			requestAuthCode(config.challengeURI);
+			requestAuthCode(config.challengeURI, appCode);
 		}
 	}
 	
@@ -114,9 +110,11 @@ QNR.authCode = (function(window){
 				}
 			}
 		}
+		
+		return origin;
 	}
 	
-	function requestAuthCode(url){
+	function requestAuthCode(url, key){
 		var sp = "?", 
 			index = url.indexOf("?");
 			
@@ -126,7 +124,7 @@ QNR.authCode = (function(window){
 			sp = "&";
 		}
 		
-		url = url + sp + "timestamp=" + (+new Date());
+		url = url + sp + "k=" + key + "&timestamp=" + (+new Date());
 		
 		sendRequest(url, {charset: "utf-8"});
 	}

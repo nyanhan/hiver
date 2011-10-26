@@ -272,7 +272,6 @@ DateHash.prototype = {
 	}
 }
 
-
 DP.toDateHash = function(){
 	var d = this;
 	return new DateHash(d.getFullYear(), d.getMonth(), d.getDate());
