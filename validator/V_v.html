@@ -1,0 +1,68 @@
+<html>
+<head>
+	<title></title>
+	<style>
+		
+	</style>
+</head>
+<body>
+	<input type="text" data-V_v_rule="empty equal2 true" value="" class="xxx" />
+	<input type="text" data-V_v_rule="empty" value="" class="xxx" />
+	<input type="button" value="click me" onclick="check()" />
+</body>
+<script type="text/javascript" src="jquery-1.6.1.js"></script>
+<script type="text/javascript" src="delayCall.js"></script>
+<script type="text/javascript" src="V_v_1.0.js"></script>
+<script type="text/javascript">
+(function(window) {
+	V_v.checker({
+		name: "empty",
+		message: "empty",
+		check: function(str, rule){
+			if(str){
+				rule.next(false);
+			} else {
+				rule.end(true);
+			}
+
+		}
+	});
+
+	V_v.checker({
+		name: "equal2",
+		message: "equal2",
+		check: function(str, rule){
+			if(str === "2"){
+				rule.result(true);
+			} else {
+				rule.result(false);
+			}
+			
+		}
+	});
+
+	V_v.checker({
+		name: "true",
+		message: "true",
+		check: function(str, rule){
+
+			rule.result(true);
+		}
+	});
+})(this);
+
+	var a = V_v(".xxx").validate({
+		onverified: function(result, m){
+			console.log(result, m);
+		}
+	});
+
+	function check(){
+		a.check({
+			onverified: function(result){
+				alert(result);
+			}
+		});
+	}
+</script>
+</html>

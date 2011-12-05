@@ -1,3 +1,4 @@
+/*
 loader:
     commonjs
     define module
@@ -94,3 +95,4 @@ template:
 UI:
 	
 
+*/

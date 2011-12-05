@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body style="width:1000px;margin: 10px;padding: 10px;">
+<h1>hello world <a href="###">111111</a></h1>
+<form>
+<button> wo kao </button>
+    </form>
+</body>
+</html>
+<script src="tuna_090501.js"></script>
+<script>
+	var date = new Date();
+</script>
+<script>
+
+var data = [];
+
+	window.console = {
+		log: function(r){
+			data.push(r);
+		}
+	}
+
+$ajax('data.txt', null, function(txt){
+	var t = new Date();
+	
+	for (var i = 0; i < 10; i++) {
+		var xx = eval(txt);
+	}
+	
+	if(xx)
+		console.log(new Date() - t + "___eval" , xx);
+});
+
+$ajax('data.txt', null, function(txt){
+	var t = new Date();
+	
+	for (var i = 0; i < 10; i++) {
+		var xx = new Function('return ' + txt)();
+	}
+	if(xx)
+	console.log(new Date() - t + "___Func", xx);
+});
+
+window.execScript && $ajax('data.txt', null, function(txt){
+	var t = new Date();
+	
+	for (var i = 0; i < 10; i++) {
+		var xxxx = window.execScript('var xxxx = ' + txt);
+	}
+
+	if(xxxx)
+		console.log(new Date() - t + "___exec", xxxx);
+});
+
+$ajax('data.txt', null, function(txt){
+	var t = new Date();
+	
+	for (var i = 0; i < 10; i++) {
+		var script = document.createElement('script');
+
+		script.text = 'var xxx = ' + txt;
+
+		document.body.appendChild(script);
+	}
+	if(xxx)
+	console.log(new Date() - t + "___script", xxx);
+});
+
+setTimeout(function(){
+	console.log(new Date() - date + "___Dura");
+	if(data.length){
+		alert(data.join("\n"));
+	}
+}, 1000);
+
+
+
+</script>
