@@ -1,0 +1,41 @@
+<input type="text" value="xxx" id="xxx" />
+<input type="text" value="yyy" id="yyy" />
+<div id="show"></div>
+
+<script>
+	var xxx = document.getElementById("xxx"),
+		yyy = document.getElementById("yyy"),
+		con = document.getElementById("show");
+
+	xxx.onmousedown = function(){
+		con.innerHTML += ("down<br>");
+	};
+	xxx.onclick = function(){
+		con.innerHTML += ("click<br>");
+	};
+	xxx.onmouseup = function(){
+		con.innerHTML += ("up<br>");
+	};
+	xxx.onfocus = function(){
+		con.innerHTML += ("focus<br>");
+	};
+	xxx.onblur = function(){
+		con.innerHTML += ("blur<br>");
+	};
+	
+	yyy.onmousedown = function(){
+		con.innerHTML += ("down<br>");
+	};
+	yyy.onclick = function(){
+		con.innerHTML += ("click<br>");
+	};
+	yyy.onmouseup = function(){
+		con.innerHTML += ("up<br>");
+	};
+	yyy.onfocus = function(){
+		con.innerHTML += ("focus<br>");
+	};
+	yyy.onblur = function(){
+		con.innerHTML += ("blur<br>");
+	};
+</script>

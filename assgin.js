@@ -97,9 +97,7 @@
     if (BS.isIE6) {
         try {
             $d.execCommand("BackgroundImageCache", false, true);
-        } catch (e) {
-        }
-        ;
+        } catch (e) {}
     }
 
 
@@ -151,13 +149,11 @@
     }
 
     function checkDateHash(year, month, date) {
-        if (!isInteger(year) || !isInteger(month) || !isInteger(date)
+        return !(!isInteger(year) || !isInteger(month) || !isInteger(date)
             || year < 1001 || year > 2999
             || month > 12 || month < 0
-            || date < 0 || date > getDaysOfMonth(year, month)) {
-            return false;
-        }
-        return true;
+            || date < 0 || date > getDaysOfMonth(year, month));
+
     }
 
     function walkStringInTemplate(str, container, debug) {
@@ -188,7 +184,7 @@
         this._y = year;
         this._m = month;
         this._d = date;
-    }
+    };
     DateHash.getDaysOfMonth = getDaysOfMonth;
 
     DateHash.prototype = {
@@ -273,12 +269,12 @@
                 }
             }
         }
-    }
+    };
 
     DP.toDateHash = function () {
         var d = this;
         return new DateHash(d.getFullYear(), d.getMonth(), d.getDate());
-    }
+    };
 
     SP.trim = function () {
         var str = this,
@@ -296,13 +292,13 @@
             }
         }
         return whitespace.indexOf(str.charAt(0)) === -1 ? str : '';
-    }
+    };
     SP.toRawString = function () {
         var r = ".\/+*?[]{}()^$|";
         r = r.split("").join("\\");
 
         return this.replace(new RegExp("([\\" + r + "])", "g"), "\\$1");
-    }
+    };
     SP.toDateHash = function (format) {
         format = format ? format.toLowerCase()
             : defaultDateFormat;
@@ -342,10 +338,10 @@
 
 
         return new DateHash(year, month, date, true);
-    }
+    };
     SP.isDateString = function (format) {
         return !!this.toDateHash(format);
-    }
+    };
     SP.sprintf = function (obj, debug) {
         var temp = this == null ? "" : String(this),
             o = obj || {};
@@ -354,7 +350,7 @@
             var v = walkStringInTemplate(k, o, debug);
             return v == null ? s : v;
         });
-    }
+    };
 
 
     AP.forEach = function (func, binder) {
@@ -367,7 +363,7 @@
             }
             func.call(binder, self[i], i, self);
         }
-    }
+    };
     AP.indexOf = function (item, from) {
         var self = this,
             len = self.length,
@@ -383,7 +379,7 @@
         }
 
         return -1;
-    }
+    };
     AP.lastIndexOf = function (item, from) {
         var self = this,
             i = self.length;
@@ -398,7 +394,7 @@
         }
 
         return -1;
-    }
+    };
     AP.every = function (func, binder) {
         //func(item, i, self);
         var self = this,
@@ -414,7 +410,7 @@
         }
 
         return true;
-    }
+    };
     AP.some = function (func, binder) {
         //func(item, i, self);
         var self = this,
@@ -430,7 +426,7 @@
         }
 
         return false;
-    }
+    };
     AP.map = function (func, binder) {
         //func(item, i, self);
         var self = this,
@@ -445,7 +441,7 @@
         }
 
         return returnValue;
-    }
+    };
     AP.filter = function (func, binder) {
         //func(item, i, self);
         var self = this,
@@ -462,7 +458,7 @@
         }
 
         return returnValue;
-    }
+    };
 
 
     FP.bind = function (binder) {
@@ -483,7 +479,7 @@
             supClass.prototype.constructor = supClass;
         }
         return self;
-    }
+    };
 
 
 })(this);
