@@ -112,9 +112,11 @@
 			return returnResult;
 		},
 		mxl: function(context){
+			// order config
 			return context[0].mxl;
 		},
 		delta: function(sn){
+			// price config
 			var f = sn.split("~")[0].split("/")[0];
 
 			return (parseInt(f.substr(0, 2) + f.substr(f.length - 1), 36) + parseInt("0" + f.substr(2, f.length - 3), 10) * 36 * 36 * 36) % 97;
