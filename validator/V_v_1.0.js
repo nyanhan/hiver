@@ -13,37 +13,33 @@ if(typeof $w.jQuery === "undefined" || !chkVer()){
 	throw CORE + "-" + VER + " required.";
 }
 
-var $ = $w.V_v = $w.jQuery.sub();
+var $ = $w.jQuery;
 
 
-var RULE_ATTR = "data-V_v_rule",
-	RULE_OBJ_KEY = "V_v_rule_object",
-	DEFAULT_CHECKER = "V_v_checker_default",
-	EVENT_SUFFIX = ".V_v_input";
+var RULE_ATTR = "data-valid_rule",
+	RULE_OBJ_KEY = "valid_ruler",
+	RULE_EVENT_PERFIX = "each_",
+	DEFAULT_CHECKER = "valid_checker_default",
+	EVENT_SUFFIX = ".valid_input";
 
 $.extend({
 	_checkerHash: {},
 	IChecker: {
 		name: DEFAULT_CHECKER,
 		message: "",
-		async: false,
 		check: function(str, rule){
 			rule.result(true);
 		}
 	},
-	IRule: {
-		onverified: $.noop,
-		loading: 50,
-		onloading: $.noop,
-		timeout: 0,
-		ontimeout: $.noop
-	},
 	IGroup: {
-		onverified: $.noop,
-		loading: 50,
-		onloading: $.noop,
+		each_onchecked: $.noop,
+		each_timeout: 0,
+		each_ontimeout: $.noop,
+		each_onloading: $.noop,
+		onchecked: $.noop,
 		timeout: 0,
-		ontimeout: $.noop
+		ontimeout: $.noop,
+		onloading: $.noop
 	}
 });
 
@@ -62,58 +58,82 @@ $.extend({
 
 		$._checkerHash[config.name] = $.extend({}, $.IChecker, config);
 	},
-	group: function(selector, config){
+	validate: function(selector, config){
 
 		return new Group(selector, config);
 	}
 });
 
-$.fn.extend({
-	validate: function(config){
-		return $.group(this, config);
-	}
-});
+
+
 
 var Group = function(selector, config){
 	var self = this;
 
-	self._config = $.extend({}, $.IRule, config);
-	self._jquery = $(selector);
+	self._l = [];
+	self._rConf = {};
+	self._gConf = {};
 
-	self._init();
-}
+	self._init(selector, config);
+};
 
 $.extend(Group.prototype, {
-	_init: function(){
+	_init: function(selector, config){
+		this.map(config);
+		this.append(selector);
+	},
+	map: function(config){
+
 		var self = this;
 
-		self._jquery.each(function(){
+		config = $.extend({}, $.IGroup, config);
+
+		$.each($.IGroup, function(k, v){
+			if (~k.indexOf(RULE_EVENT_PERFIX)) {
+				self._rConf[k.replace(RULE_EVENT_PERFIX, "")] = config[k];
+			} else {
+				self._gConf[k] = config[k];
+			}
+		});
+	},
+	append: function(selector){
+
+		var self = this;
+
+		$(selector).each(function(){
 			var rule = $.rule(this);
 
 			if(rule){
 				rule.destory();	
 			}
 
-			$.rule(this, self._config);
+			$.rule(this, self._rConf);
+
+			self._l.push(this);
 		});
 	},
-	check: function(config){
+	check: function(){
 		var self = this;
 
-		var o = $.extend({}, $.IGroup, config);
-
-		$.each(o, function(k, item){
-			self["_" + k] = item;
-		});
-
 		self._defer = $.Deferred().done(function(result){
-			self._onverified(result);
+			self._gConf.onchecked(result);
 		});
 
-		self._jquery.each(function(){
-			$.rule(this).check(function(){
-				self.result();
-			});
+		// filter removed element
+		for(var i = 0; i < self._l.length; i++){
+			if(!self._isInDOM(self._l[i])){
+				self._l.splice(i, 1);
+				i-- ;
+			}
+		}
+
+		$.each(self._l, function(i, item){
+
+			var r = $.rule(item);
+
+			if (r) {
+				r.check(function(){ self.result(); });
+			}
 		});
 	},
 	result: function(){
@@ -121,19 +141,16 @@ $.extend(Group.prototype, {
 			all = true,
 			self = this;
 
-		self._jquery.each(function(){
+		$.each(self._l, function(i, item){
 
-			if(self._isInDOM(this)){
+			var res = $.rule(item).getResult();
 
-				var res = $.rule(this).getResult();
-
-				if(res === undefined){
-					all = false;
-					return;
-				}
-
-				result.push(res);
+			if(res === undefined){
+				all = false;
+				return false;
 			}
+
+			result.push(res);
 			
 		});
 
@@ -150,7 +167,7 @@ $.extend(Group.prototype, {
 		this._defer.resolve(result);
 	},
 	_isInDOM: function(element){
-		return $.contains(document.body, element);
+		return $.contains($w.document.body, element);
 	}
 });
 
@@ -160,15 +177,14 @@ var Rule = function(element, config){
 
 	config = $.extend({}, $.IRule, config);
 	self._jquery = $(element);
+	self._timer = 0;
 
 	$.each(config, function(k, item){
 		self["_" + k] = item;
 	});
 
-	self._timer = $.delayCall(null, 200);
-
 	self._init(); 
-}
+};
 
 $.extend(Rule.prototype, {
 	_init: function(){
@@ -179,16 +195,14 @@ $.extend(Rule.prototype, {
 		self._checkerHash = {};
 		self._currentChecker = undefined;
 		self._message = "";
+		self._bindEvents();
 
-		self._jquery.bind("input" + EVENT_SUFFIX, function(){
-			self._timer.reset(function(){
-				self.check();
-			});
-		});
+	},
+	jQ: function(){
+		return this._jquery;	
 	},
 	destory: function(){
-		self._jquery.unbind(EVENT_SUFFIX);
-		self._timer.clear();
+		this._jquery.unbind(EVENT_SUFFIX);
 	},
 	rule: function(str){
 		if(str){
@@ -205,18 +219,12 @@ $.extend(Rule.prototype, {
 		
 		self._defer = $.Deferred().done(function(result){
 
-			if(result){
-				self._onverified(true, self._currentChecker.message);
-			} else {
-				self._onverified(false, self._currentChecker.message);
-			}
+			self._onchecked(result, self._currentChecker.message);
 
 			self._result = result;
 			self._message = self._currentChecker.message || "";
 
-			if (next) {
-				next();
-			}
+			if (next) { next(); }
 		
 		});
 
@@ -335,6 +343,38 @@ $.extend(Rule.prototype, {
 	},
 	_clearChecked: function(){
 		this._checkedList = {};
+	},
+	_bindEvents: function(){
+
+		var self = this;
+
+		function sc(){ self.check(); }
+
+		if(self._jquery[0].oninput === null){
+			self._jquery.bind("input" + EVENT_SUFFIX, sc);	
+		} else {
+			self._intervalCheck(sc);
+		}
+
+		self._jquery.bind("focus" + EVENT_SUFFIX, sc)
+				.bind("blur" + EVENT_SUFFIX, sc);
+	},
+	_intervalCheck: function(func){
+		
+		var self = this,
+			data = "";
+
+		self._jquery.bind("focus" + EVENT_SUFFIX, function(){
+			self._timer = setInterval(function(){
+
+				var v = self._jquery.val();
+
+				if(data !== v){ func(); data = v; }
+				
+			}, 100);
+		});
+
+		self._jquery.bind("blur" + EVENT_SUFFIX, function(){ clearInterval(self._timer); });
 	}
 });
 

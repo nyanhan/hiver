@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style type="text/css">
+
+
+body { margin:0; padding:0;font-size:12px;}
+div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, button, p, blockquote, th, td { margin:0; padding:0; }
+fieldset, img { border:0; }
+table { border-spacing:0; }
+ol, ul { list-style:none; }
+address, caption, cite, code, dfn, em, th, var { font-style:normal; font-weight:400; }
+strong { font-style:normal; font-weight:700; }
+caption, th { text-align:left; }
+h1, h2, h3, h4, h5, h6 { font-size:100%; font-weight:400; }
+q:before, q:after { content:""; }
+abbr, acronym { border:0; }
+a { color:#0069ca; text-decoration:none; font-size:12px;}
+
+.yselector{background-color:#fff;width:120px;float:left;}
+.yselector_arraw{width:20px;border-left:1px dotted #565656;position:absolute;right:0;top:2px;height:18px;}
+.yselector_arraw b{border-width:4px;border-style:solid;border-color:#565656 #fff #fff #fff;width:0;height:0;font-size:0;line-height:0;position:absolute;right:6px;top:8px;}
+.yselector_box{position:relative;cursor:pointer;border:1px solid #999;padding:2px 20px 2px 2px;}
+.yselector_input{display:block;padding:0 2px;height:19px;line-height:19px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+/* ie6 hack */
+* html .yselector_arraw {width:40px;border-width:2px;height:36px;top:3px;zoom:0.5;}
+* html .yselector_arraw b{border-width:8px;right:12px;top:16px;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .yselector_input:focus {outline-width:1px;outline-style:dotted;outline-color:#999;}
+}
+
+.yselector_suggest{width:118px;border:1px solid #999;margin-top:-1px;position:absolute;overflow-x:hidden;overflow-y:auto;background-color:#fff;z-index:13;}
+.yselector_suggest a{color:#555;display:block;line-height:24px;height:24px;padding:0 5px 0 4px;outline:0;}
+.yselector_suggest a:hover, .yselector_suggest a.hover{color:#fff;background-color:#4778da;}
+.yselector_suggest li{overflow:hidden;white-space:nowrap;padding:0;display:inline;}
+</style>
+</head>
+<body>
+
+
+<select id="province"></select>
+<select id="city"></select>
+<select id="county"></select>
+
+</body>
+<script type="text/javascript" src="http://qunarzz.com/js/jquery/build/jquery-1.5.2.min.js"></script>
+<script src="selector.js"></script>
+<script type="text/javascript" src="AreaData.js"></script>
+<script>
+
+function formatData(data){
+
+    var districtMap = {};
+
+    districtMap['1'] = {name:'root', code:'1', children:[]};
+
+    for (var code in data) {
+
+        if (isNaN(parseInt(code))) { continue; }
+
+        var d = data[code], 
+            pid = d[1] || '1',
+            dis = districtMap[pid];
+
+        districtMap[code] = { name:d[0], code:code, parent:d[1] };
+
+
+        if (dis) {
+            
+            if (!dis.children) {
+                dis.children = [];
+            }
+
+            dis.children.push(code);
+        }
+    }
+
+    return districtMap;
+}
+
+function getName(id){
+    return districtMap[id] ? districtMap[id].name : "";
+}
+
+function reformData(list, def){
+
+    var ret = [];
+
+    if (def) {
+        ret.push(def);
+    }
+
+    $.each(list, function(i, item){
+        ret.push({
+            value: item,
+            text: getName(item)
+        });
+    });
+
+    return ret;
+}
+
+var districtMap = formatData(AreaData);
+
+var provinceData = districtMap["1"].children;
+
+var options = $("#province")[0].options;
+
+options.add(new Option("选择省", ""));
+
+$.each(provinceData, function(i, item){
+    options.add(new Option(getName(item), item));    
+});
+
+
+var county = $("#county").yselector({
+    emptyHidden: true
+});
+
+var city = $("#city").yselector({
+    onchange: function(obj){
+        var _county = obj.value;
+        var c = districtMap[_county];
+
+        var list = c && c.children ? c.children : [];
+
+        county.setOptions(reformData(list, { value: "", text: "选择区/县" }));
+    },
+    emptyHidden: true
+});
+
+var province = $("#province").yselector({
+    onchange: function(obj){
+        
+        var prov = obj.value;
+        var c = districtMap[prov];
+
+        var list = c && c.children ? c.children : [];
+
+        city.setOptions(reformData(list, { value: "", text: "选择市" }));
+    }
+});
+
+</script>
+</html>

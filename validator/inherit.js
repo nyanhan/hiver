@@ -1,9 +1,5 @@
-(function($w){
-
-var jQuery = $w.jQuery || {};
-
 jQuery.inherit = function(sub, sup){
-	sup = sup || $w.Object;
+	sup = sup || Object;
 
 	var F = function(){};
 	F.prototype = sup.prototype;
@@ -16,7 +12,4 @@ jQuery.inherit = function(sub, sup){
 		sup.prototype.constructor = sup;
 	}
 };
-
-
-})(this);
 

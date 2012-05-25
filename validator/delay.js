@@ -1,12 +1,6 @@
 (function(window){
-	
-	if(typeof window.jQuery === "undefined"){
-		window.jQuery = {};
-	}
 
-	var $ = window.jQuery;
-
-	function DelayCall (fn, time) {
+	function Delay (fn, time) {
 		this._fn = fn;
 		this._time = time;
 		this._actived = false;
@@ -14,7 +8,7 @@
 		this._init();
 	}
 	
-	DelayCall.prototype = {
+	Delay.prototype = {
 		_init: function() {
 			var s = this;
 			
@@ -62,9 +56,9 @@
 		}
 	};
 
-	$.extend({
-		delayCall: function(fn, time){
-			return new DelayCall(fn, time);
+	jQuery.extend({
+		delay: function(fn, time){
+			return new Delay(fn, time);
 		}
 	});
 

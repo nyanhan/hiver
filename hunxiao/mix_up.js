@@ -20,6 +20,7 @@
 				sl = s.staticList(),
 				power = s.powerList(),
 				seed, size = s._ml.length,
+				ll = s.mxlList(),
 				temp;
 
 			for ( var i = 0; i < size; i += 10) {
@@ -28,7 +29,7 @@
 
 				if (n > 12){ n = 12; }
 
-				seed = (Math.abs(s.mxl(sl[i])) - 1) % power[n] + 1;
+				seed = (Math.abs(ll[i]) - 1) % power[n] + 1;
 
 				while (seed > 1){
 
@@ -111,9 +112,16 @@
 
 			return returnResult;
 		},
-		mxl: function(context){
-			// order config
-			return context[0].mxl;
+		mxlList: function(){
+			
+			var ml = this.staticList(),
+				arr = [];
+
+			for ( var p = 0, l = ml.length; p < l; p++) {
+				arr[arr.length] = ml[p][0].mxl;
+			}
+
+			return arr;
 		},
 		delta: function(sn){
 			// price config

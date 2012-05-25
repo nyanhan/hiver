@@ -11,11 +11,11 @@
   <script>
 
 	function getMixed(){
-		return $.getJSON("http://l-interdb1.f.cn1.qunar.com:8000/api/stationstationSearch.jsp?format=json&from=%E5%8C%97%E4%BA%AC&to=%E4%B8%8A%E6%B5%B7&type=oneway&date=20120120&callback=?");
+		return $.getJSON("http://train.qunar.com/qunar/stationtostation.jsp?format=json&from=%E5%8C%97%E4%BA%AC&to=%E4%B8%8A%E6%B5%B7&type=oneway&date=20120209&ex_track=&callback=?");
 	}
 
 	function getRaw(){
-		return $.getJSON("http://l-interdb1.f.cn1.qunar.com:8000/stationstationSearch.jsp?format=js&from=%E5%8C%97%E4%BA%AC&to=%E4%B8%8A%E6%B5%B7&type=oneway&date=20120120&callback=?");
+		return $.getJSON("http://train.qunar.com/qunar/stationstation.jsp?format=js&from=%E5%8C%97%E4%BA%AC&to=%E4%B8%8A%E6%B5%B7&type=oneway&date=20120209&ex_track=&callback=?");
 	}
 
 	$.when(getRaw(), getMixed()).done(function(raw, mixed){
