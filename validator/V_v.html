@@ -3,62 +3,88 @@
 	<title></title>
 </head>
 <body>
-	<input type="text" data-V_v_rule="empty equal2 true" value="" class="xxx" />
-	<input type="text" data-V_v_rule="empty" value="" class="xxx" />
-	<input type="button" value="click me" onclick="check()" />
+<form action="" method="GET" id="test_form">
+	<input type="text" data-jvalid-ruler="empty equal2 true" value="" class="xxx" />
+	<input type="text" data-jvalid-ruler="empty noname hello" value="" class="xxx" />
+	<input type="submit" value="click me" />
+</form>
 </body>
-<script type="text/javascript" src="jquery-1.6.1.js"></script>
-<script type="text/javascript" src="V_v_1.0.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="jquery-1.6.1.js"></script> -->
+<script type="text/javascript" src="lib/v.js"></script>
 <script type="text/javascript">
 (function(window) {
-	$.checker({
-		name: "empty",
-		message: "empty",
-		check: function(str, rule){
-			if(str){
-				rule.next(false);
-			} else {
-				rule.end(true);
-			}
 
+$.checker.addItem({
+	name: "empty",
+	message: "empty",
+	check: function(str, rule){
+		if(str){
+			rule.next(false);
+		} else {
+			rule.end(true);
 		}
-	});
 
-	$.checker({
-		name: "equal2",
-		message: "equal2",
-		check: function(str, rule){
-			if(str === "2"){
-				rule.result(true);
-			} else {
-				rule.result(false);
-			}
-			
-		}
-	});
+	}
+});
 
-	$.checker({
-		name: "true",
-		message: "true",
-		check: function(str, rule){
-
+$.checker.addItem({
+	name: "equal2",
+	message: "equal2",
+	check: function(str, rule){
+		if(str === "2"){
 			rule.result(true);
+		} else {
+			rule.result(false);
 		}
-	});
+		
+	}
+});
+
+$.checker.addItem({
+	name: "true",
+	message: "true",
+	check: function(str, rule){
+		rule.result(true);
+	}
+});
+
+$.checker.addItem({
+	name: "noname",
+	message: "noname",
+	check: function(str, rule){
+		if(str === "noname"){
+			rule.result(true);
+			rule.result(true);
+			rule.result(false);
+		} else {
+			rule.result(false);
+		}
+	}
+});
+
+$.checker.addItem({
+	name: "hello",
+	message: "hello",
+	check: function(str, rule){
+		if(str === "hello"){
+			rule.result(true);
+		} else {
+			rule.result(false);
+		}
+	}
+});
+
 })(this);
 
-	var a = $.validate(".xxx", {
-		onchecked: function(result, m){
-			console.log(result, m);
-		}
-	});
+$("#test_form").jvalidForm({
+	onchecked: function(){
 
-	function check(){
-		a.check({
-			onverified: function(result){
-				alert(result);
-			}
-		});
+	},
+	each_onchecked: function(c){
+		console.log(arguments);
 	}
+});
+
 </script>
 </html>

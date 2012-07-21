@@ -19,6 +19,29 @@ function isBlank(str){
 	return !!$.trim(str);
 }
 
+QunarInputChecker.prototype.convertToHalf = function(){
+	
+	var str = this.getEl().value;
+	
+	var result = [];
+	
+	for (var i = 0; i < str.length; i++)
+	{
+		if (str.charCodeAt(i)==12288)
+		{
+			result.push( String.fromCharCode(str.charCodeAt(i)-12256) );
+			continue;
+		}
+		if ( str.charCodeAt(i)>65280 && str.charCodeAt(i)<65375 ) {
+			result.push( String.fromCharCode(str.charCodeAt(i)-65248) );
+		} else {
+			result.push( String.fromCharCode(str.charCodeAt(i)) );
+		}
+	} 
+	
+	 this.getEl().value = result.join('');	
+}
+
 function isDate(str){
 	var re = /^([12]\d{3})([\/\-])(\d{1,2})\2(\d{1,2})$/,
 		dateList = re.exec(str);
