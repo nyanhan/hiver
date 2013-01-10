@@ -6,8 +6,7 @@
 
 (function(window, undefined){
 
-var $ = window.jQuery,
-    document = window.document;
+var $ = window.jQuery;
 
 var 
     SELECTOR_DATA_KEY = "YSELECTOR",
@@ -146,7 +145,6 @@ Selector.prototype = {
         
         var rawSelect = obj.rawSelect,
             options = rawSelect.options,
-            value = rawSelect.value,
             dataList = [], item;
 
         for (var i = 0, l = options.length; i < l; i++) {
