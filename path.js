@@ -19,7 +19,7 @@ function walk(root, path, func){
         item = arr[i];
 
         if(item === ""){ continue; }
-        
+
         if(item === "*" ){
             tl = group;
             group = [];
@@ -36,7 +36,7 @@ function walk(root, path, func){
                 }
 
             }
-        
+
         } else {
             for (j = 0; j < group.length; j++) {
 
@@ -53,7 +53,7 @@ function walk(root, path, func){
             }
         }
     }
-    
+
     i = 0; len = group.length;
 
     for (; i < len; i++) {
