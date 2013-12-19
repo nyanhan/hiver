@@ -1,16 +1,4 @@
 (function(window) {
-    var search = window.location.search,
-        doc    = window.document,
-        html   = doc.documentElement;
-
-    if (search.indexOf("debug=true=lite") >= 0) {
-        html.setAttribute("debug", "true");
-        doc.write('<script src="tools/firebug-lite/build/firebug-lite.js"></script>');
-    }
-
-})(this);
-
-(function(window) {
 
     var $ = window.jQuery;
 
