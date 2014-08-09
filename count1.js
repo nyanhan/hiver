@@ -15,7 +15,7 @@ function cal(n){
 		if(n & 1) {
 			i ++;
 		}
-		n = n >> 1;	
+		n = n >> 1;
 	} while (n);
 	return i;
 }

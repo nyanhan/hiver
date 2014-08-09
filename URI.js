@@ -3,7 +3,7 @@
 	if(typeof jQuery === "undefined"){
 		window.jQuery = {};
 	}
-	
+   
 	var $ = jQuery,
 		reURL    = (/^([^:\s]+):\/{2,3}([^\/\s:]+)(?::(\d{1,5}))?(\/[^\?\s#]+)?(\?[^#\s]+)?(#[^\s]+)?/),
 		reSearch = (/(?:[\?&])(\w+)=([^#&\s]*)/g),
