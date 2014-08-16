@@ -43,8 +43,8 @@ var len = function(no) {
 // 所以可以和 max_length 配合一下优化一下循环次数
 // 这里只是演示就先不做了
 
-for( var i = 1; i <= max; i++ ) {
-    for( var j = 1; j <= max; j++ ) {
+for( var i = 0; i <= max; i++ ) {
+    for( var j = 0; j <= max; j++ ) {
         if(len(i) + len(j) + len(i + j) === (input - 4)) {
             console.log(i + " + " + j + " = " + (i + j));
             count++;
