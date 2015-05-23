@@ -1,4 +1,3 @@
-
 var input = typeof process !== "undefined" ? (process.argv[2] || 14) : 14;
 console.log("Input: " + input);
 
@@ -26,13 +25,15 @@ while (max_length > 0) {
 
 // TODO
 // 这个函数都是重复计算可以缓存计算结果
-var len = function(no) {
+var len = function (no) {
     var l = 0;
 
-    while(no >= 0) {
+    while (no >= 0) {
         l += stick_len[no % 10];
         no = parseInt(no / 10, 10);
-        if(no === 0) { break; }
+        if (no === 0) {
+            break;
+        }
     }
 
     return l;
@@ -43,9 +44,9 @@ var len = function(no) {
 // 所以可以和 max_length 配合一下优化一下循环次数
 // 这里只是演示就先不做了
 
-for( var i = 0; i <= max; i++ ) {
-    for( var j = 0; j <= max; j++ ) {
-        if(len(i) + len(j) + len(i + j) === (input - 4)) {
+for (var i = 0; i <= max; i++) {
+    for (var j = 0; j <= max; j++) {
+        if (len(i) + len(j) + len(i + j) === (input - 4)) {
             console.log(i + " + " + j + " = " + (i + j));
             count++;
         }
