@@ -1,23 +1,26 @@
+var path = require("path");
+
 module.exports = {
-    entry: "./entry.js",
+    entry: "./js/entry.js",
     output: {
-        path: __dirname,
-        filename: "bundle.js"
+        path: "./build/",
+        filename: "bundle.js",
+        publicPath: "/build/"
     },
     module: {
         loaders: [{
-                test: /\.css$/,
-                loader: "style!css"
-            },
-            {
-                test: /\.js$/,
-                loader: "babel"
-            },
-            {
-                test: /\.jsx$/,
-                loader: "babel"
-            }
-        ]
+            test: /\.css$/,
+            loader: "style!css",
+            exclude: /(node_modules|bower_components)/
+        }, {
+            test: /\.js$/,
+            loader: "babel",
+            exclude: /(node_modules|bower_components)/
+        }, {
+            test: /\.jsx$/,
+            loader: "babel",
+            exclude: /(node_modules|bower_components)/
+        }]
     }
 };
 
