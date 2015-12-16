@@ -1,4 +1,4 @@
-function * foo( input ) {
+function* foo( input ) {
   var res = yield input;
   console.log('res is ', res);
 }
