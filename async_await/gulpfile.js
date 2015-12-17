@@ -13,6 +13,7 @@ gulp.task("await", "transform ES7 async/await to generator.", () => {
 
 gulp.task("watch", "auto build when files change", () => {
   gulp.watch('js/**/*.babel.js', ["await"]);
+  gulp.run(["await"]);
 });
 
 

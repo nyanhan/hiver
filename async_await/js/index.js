@@ -16,8 +16,28 @@ let sleep = (function () {
   };
 })();
 
+let sleep_error = (function () {
+  var ref = _asyncToGenerator(function* (timeout) {
+    return new Promise((resolve, reject) => {
+      setTimeout(function () {
+        reject("timeout");
+      }, timeout);
+    });
+  });
+
+  return function sleep_error(_x2) {
+    return ref.apply(this, arguments);
+  };
+})();
+
 _asyncToGenerator(function* () {
-  console.log('Do some thing, ' + new Date());
+  console.log('Do some thing.' + new Date());
   yield sleep(3000);
-  console.log('Do other things, ' + new Date());
+
+  try {
+    console.log('Do other things, ' + new Date());
+    yield sleep_error(2000);
+  } catch (e) {
+    console.log(e);
+  }
 })();
